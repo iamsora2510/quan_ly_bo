@@ -1,0 +1,141 @@
+/* assets/css/user-style.css */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.user-nav {
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, #0d6efd 0%, #0099ff 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+
+body { background-color: #121212; color: #ffffff; }
+
+/* Navbar tùy chỉnh */
+.navbar-custom { 
+    background-color: #1f1f1f; 
+    border-bottom: 1px solid #333; 
+}
+
+/* Banner Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../img/hero-cow.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0;
+    text-align: center;
+    border-bottom: 1px solid #333;
+}
+
+/* Thẻ Card con bò */
+.card-bo {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+.card-bo:hover { 
+    transform: translateY(-10px); 
+    border-color: #0d6efd; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Ảnh con bò trong danh mục */
+.img-bo-index {
+    height: 200px; /* Cố định chiều cao ảnh để các card đều nhau */
+    object-fit: cover; /* Chống méo ảnh */
+    padding: 10px;
+    border-radius: 20px;
+}
+
+/* Văn bản giá tiền */
+.price-text { 
+    color: #ff4757; 
+    font-size: 1.2rem; 
+    font-weight: bold; 
+}
+
+/* Footer tùy chỉnh */
+.footer-custom { 
+    background-color: #1a1a1a; 
+    border-top: 1px solid #333; 
+    margin-top: 50px;
+}
+
+
+
+
+/* Style cho trang chi tiết bò */
+.detail-container {
+    background-color: #1e1e1e; /* Màu nền card tối */
+    border: 1px solid #333;
+}
+
+.img-detail {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    object-fit: cover;
+}
+
+.detail-label {
+    color: #94a3b8; /* Màu chữ nhạt cho label */
+    display: block;
+    font-size: 0.9rem;
+}
+
+.detail-value {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.table-custom {
+    color: #ffffff;
+    border-color: #333;
+}
+
+.table-custom thead {
+    background-color: #2d3748;
+}
+
+.table-custom td {
+    color: #cbd5e1;
+}

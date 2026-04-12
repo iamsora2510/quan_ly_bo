@@ -1,0 +1,67 @@
+/* Tông màu chủ đạo cho Đại lý bò */
+:root {
+    --primary-color: #198754; /* Xanh lá nông nghiệp */
+    --secondary-color: #ffc107; /* Vàng đặt chỗ */
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: bold;
+    color: var(--primary-color) !important;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Card sản phẩm (Bò) */
+.card-product {
+    transition: transform 0.3s shadow 0.3s;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-product:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.card-img-top {
+    height: 220px;
+    object-fit: cover;
+}
+
+/* Các nút bấm */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #146c43;
+    border-color: #146c43;
+}
+
+.btn-warning {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: #000;
+}
+
+/* Form đăng ký/đăng nhập */
+.auth-card {
+    border-radius: 20px;
+    border: none;
+}

@@ -1,0 +1,59 @@
+/* assets/css/admin-custom.css */
+
+/* Định dạng bảng dữ liệu thu mua */
+.table-thu-mua {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-thu-mua thead {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+/* Hiển thị lỗi Validation */
+.validation-error {
+    border-left: 5px solid #dc3545;
+    background-color: #fff5f5;
+    color: #dc3545;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+/* Nút bấm chuyên nghiệp */
+.btn-save-phieu {
+    background-color: #28a745;
+    border: none;
+    font-weight: bold;
+    padding: 10px 25px;
+    transition: 0.3s;
+}
+
+.btn-save-phieu:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Màu sắc cho các cột số tiền */
+.text-money {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.text-total {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Badge trạng thái */
+.badge-phieu {
+    padding: 8px 12px;
+    border-radius: 20px;
+}
+
+/* Hiệu ứng dòng khi di chuột qua */
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: 0.3s;
+}
