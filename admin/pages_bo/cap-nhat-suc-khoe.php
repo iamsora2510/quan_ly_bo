@@ -1,9 +1,11 @@
 <?php 
-include '../config/db.php'; 
-include './includes/header.php'; 
-include './includes/sidebar.php'; 
+include '../../config/db.php'; 
+include '../includes/header.php'; 
+include '../includes/sidebar.php'; 
 
-$id_bo = $_GET['id'] ?? null;
+// Bảo mật: ép kiểu ID thành số nguyên
+$id_bo = isset($_GET['id']) ? intval($_GET['id']) : null;
+
 if (!$id_bo) {
     echo "<script>window.location='danh-sach-bo.php';</script>";
     exit();
@@ -20,11 +22,15 @@ if (isset($_POST['btn_save'])) {
     $chi_tiet = mysqli_real_escape_string($conn, $_POST['chi_tiet']);
     $so_tien = $_POST['so_tien'] ?? 0;
 
-    // 1. Lưu vào Nhật ký chăm sóc
-    $sql_nhat_ky = "INSERT INTO nhat_ky_cham_soc (ma_bo, ngay_thuc_hien, can_nang, loai_cham_soc, chi_tiet) 
-                    VALUES ('$id_bo', '$ngay', '$can_nang_moi', '$loai', '$chi_tiet')";
-    
-    if (mysqli_query($conn, $sql_nhat_ky)) {
+    // Bắt đầu Transaction để đảm bảo dữ liệu đồng nhất
+    mysqli_begin_transaction($conn);
+
+    try {
+        // 1. Lưu vào Nhật ký chăm sóc
+        $sql_nhat_ky = "INSERT INTO nhat_ky_cham_soc (ma_bo, ngay_thuc_hien, can_nang, loai_cham_soc, chi_tiet) 
+                        VALUES ('$id_bo', '$ngay', '$can_nang_moi', '$loai', '$chi_tiet')";
+        mysqli_query($conn, $sql_nhat_ky);
+        
         // 2. Cập nhật lại cân nặng hiện tại trong bảng danh_sach_bo nếu có nhập cân mới
         if ($can_nang_moi > 0) {
             mysqli_query($conn, "UPDATE danh_sach_bo SET can_nang_hien_tai = '$can_nang_moi' WHERE id = $id_bo");
@@ -37,9 +43,13 @@ if (isset($_POST['btn_save'])) {
                                  VALUES ('$id_bo', '$ngay', '$ten_chi_phi', '$so_tien')");
         }
 
+        mysqli_commit($conn);
         echo "<script>alert('Cập nhật sức khỏe và chi phí thành công!'); window.location='danh-sach-bo.php';</script>";
-    } else {
-        $error = "Lỗi: " . mysqli_error($conn);
+        exit();
+
+    } catch (Exception $e) {
+        mysqli_rollback($conn);
+        $error = "Lỗi hệ thống: " . $e->getMessage();
     }
 }
 ?>
@@ -48,14 +58,18 @@ if (isset($_POST['btn_save'])) {
     <div class="app-content-header">
         <div class="container-fluid">
             <h3><i class="bi bi-heart-pulse text-danger me-2"></i>Cập nhật Sức khỏe & Chi phí</h3>
-            <p>Đang thực hiện cho bò mã tai: <strong><?= $bo['ma_so_tai'] ?></strong></p>
+            <p>Đang thực hiện cho bò mã tai: <strong class="text-primary"><?= $bo['ma_so_tai'] ?></strong></p>
         </div>
     </div>
     <div class="app-content">
         <div class="container-fluid">
-            <div class="card card-outline card-info shadow">
+            <div class="card card-outline card-info shadow-sm">
                 <form method="POST">
                     <div class="card-body">
+                        <?php if(isset($error)): ?>
+                            <div class="alert alert-danger"><?= $error ?></div>
+                        <?php endif; ?>
+
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold">Ngày thực hiện:</label>
@@ -73,7 +87,10 @@ if (isset($_POST['btn_save'])) {
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold text-success">Số tiền chi phí (VNĐ):</label>
-                                <input type="number" name="so_tien" class="form-control border-success" placeholder="Nhập 0 nếu không tốn phí">
+                                <div class="input-group">
+                                    <input type="number" name="so_tien" class="form-control border-success" placeholder="Nhập 0 nếu không tốn phí" value="0">
+                                    <span class="input-group-text text-success">đ</span>
+                                </div>
                             </div>
                         </div>
 
@@ -81,7 +98,7 @@ if (isset($_POST['btn_save'])) {
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold">Cân nặng mới (kg):</label>
                                 <input type="number" step="0.1" name="can_nang" class="form-control" placeholder="Cân cũ: <?= $bo['can_nang_hien_tai'] ?> kg">
-                                <small class="text-muted">Để trống nếu không cân</small>
+                                <small class="text-muted">Để trống nếu không cân lại</small>
                             </div>
                             <div class="col-md-8 mb-3">
                                 <label class="form-label fw-bold">Nội dung chi tiết:</label>
@@ -89,9 +106,11 @@ if (isset($_POST['btn_save'])) {
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-end">
-                        <a href="danh-sach-bo.php" class="btn btn-secondary me-2">Hủy</a>
-                        <button type="submit" name="btn_save" class="btn btn-info px-4 fw-bold">LƯU NHẬT KÝ</button>
+                    <div class="card-footer text-end bg-light">
+                        <a href="danh-sach-bo.php" class="btn btn-secondary px-4 me-2">Hủy bỏ</a>
+                        <button type="submit" name="btn_save" class="btn btn-info px-4 fw-bold text-white shadow-sm">
+                            <i class="bi bi-save me-1"></i> LƯU NHẬT KÝ
+                        </button>
                     </div>
                 </form>
             </div>
@@ -99,4 +118,4 @@ if (isset($_POST['btn_save'])) {
     </div>
 </main>
 
-<?php include './includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

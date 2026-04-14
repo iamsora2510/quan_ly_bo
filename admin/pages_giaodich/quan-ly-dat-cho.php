@@ -3,7 +3,7 @@ include '../config/db.php';
 include './includes/header.php';
 include './includes/sidebar.php';
 
-// 1. Xử lý cập nhật trạng thái khi Admin bấm nút
+// 1. Xử lý cập nhật trạng thái khi Admin bấm nút (Xác nhận/Hủy)
 if (isset($_GET['action']) && isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     $action = $_GET['action'];
@@ -14,7 +14,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     echo "<script>window.location='quan-ly-dat-cho.php';</script>";
 }
 
-// 2. Truy vấn danh sách đặt chỗ (Bắc cầu qua bảng khach_hang để lấy đúng ID giao dịch)
+// 2. Truy vấn danh sách đặt chỗ
 $sql = "SELECT d.*, k.ten_khach_hang AS fullname, k.so_dien_thoai AS sdt, k.id AS id_kh_chuan, b.ma_so_tai, g.ten_giong 
         FROM dat_cho_bo d
         JOIN khach_hang k ON d.ma_khach_hang = k.user_id
@@ -64,39 +64,43 @@ $res = mysqli_query($conn, $sql);
                                             <?php if ($row['trang_thai'] == 'cho_xac_nhan'): ?>
                                                 <span class="badge bg-warning text-dark">Đang chờ xử lý</span>
                                             <?php elseif ($row['trang_thai'] == 'da_lien_he'): ?>
-                                                <span class="badge bg-success">Đã liên hệ chốt</span>
+                                                <span class="badge bg-info text-white">Đã liên hệ chốt</span>
+                                            <?php elseif ($row['trang_thai'] == 'hoan_tat'): ?>
+                                                <span class="badge bg-success">Đã hoàn tất bán</span>
                                             <?php else: ?>
                                                 <span class="badge bg-danger">Đã hủy</span>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-end pe-3">
-                                            <?php
-                                            // Truy vấn kiểm tra trạng thái con bò hiện tại trong DB
+                                            <?php 
+                                            // Kiểm tra trạng thái bò thực tế trong DB
                                             $id_bo_check = $row['ma_bo'];
                                             $check_bo = mysqli_query($conn, "SELECT trang_thai FROM danh_sach_bo WHERE id = $id_bo_check");
                                             $bo_info = mysqli_fetch_assoc($check_bo);
                                             $trang_thai_bo = $bo_info['trang_thai'];
 
-                                            if ($trang_thai_bo == 'da_ban'): ?>
-                                                <span class="badge bg-secondary px-3 py-2"><i class="bi bi-check2-all"></i> Đã xuất bán</span>
+                                            if ($trang_thai_bo == 'da_ban' || $row['trang_thai'] == 'hoan_tat'): ?>
+                                                <span class="badge bg-secondary px-3 py-2"><i class="bi bi-check2-all"></i> Đã bán & Lập hóa đơn</span>
                                             <?php else: ?>
                                                 <?php if ($row['trang_thai'] == 'cho_xac_nhan'): ?>
                                                     <a href="?action=confirm&id=<?= $row['id'] ?>" class="btn btn-sm btn-success shadow-sm">
-                                                        <i class="bi bi-check-lg"></i>
+                                                        <i class="bi bi-check-lg"></i> Xác nhận
                                                     </a>
                                                     <a href="?action=cancel&id=<?= $row['id'] ?>" class="btn btn-sm btn-outline-danger shadow-sm" onclick="return confirm('Hủy yêu cầu này?')">
                                                         <i class="bi bi-x-lg"></i>
                                                     </a>
                                                 <?php elseif ($row['trang_thai'] == 'da_lien_he'): ?>
-                                                    <a href="lap-hoa-don.php?ma_bo=<?= $row['ma_bo'] ?>&ma_kh=<?= $row['id_kh_chuan'] ?>&id_dat_cho=<?= $row['id'] ?>"
-                                                        class="btn btn-sm btn-info text-white">
-                                                        Bán bò
-                                                    </a>
+                                                    <form action="ban-nhieu-bo.php?id_kh=<?= $row['id_kh_chuan'] ?>&id_dat_cho=<?= $row['id'] ?>" method="POST" style="display:inline;">
+                                                        <input type="hidden" name="selected_bo[]" value="<?= $row['ma_bo'] ?>">
+                                                        <button type="submit" class="btn btn-sm btn-primary fw-bold px-3 shadow-sm">
+                                                            <i class="bi bi-cart-plus-fill"></i> Bán bò
+                                                        </button>
+                                                    </form>
                                                 <?php endif; ?>
                                             <?php endif; ?>
 
-                                            <a href="tel:<?= $row['sdt'] ?>" class="btn btn-sm btn-primary shadow-sm ms-1">
-                                                <i class="bi bi-telephone-fill"></i>
+                                            <a href="tel:<?= $row['sdt'] ?>" class="btn btn-sm btn-light border shadow-sm ms-1">
+                                                <i class="bi bi-telephone-fill text-primary"></i>
                                             </a>
                                         </td>
                                     </tr>

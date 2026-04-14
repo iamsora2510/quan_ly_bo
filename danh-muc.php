@@ -36,7 +36,7 @@ $res = mysqli_query($conn, $sql);
     <div class="row mb-5 align-items-center">
         <div class="col-lg-6">
             <h2 class="fw-bold text-success mb-1">DANH MỤC BÒ GIỐNG</h2>
-            <p class="text-muted">Chọn lựa những giống bò chất lượng nhất tại STU Beef</p>
+            <p class="text-muted">Chọn lựa những giống bò chất lượng nhất tại TD Cattle Farm</p>
         </div>
         <div class="col-lg-6">
             <form action="" method="GET" class="d-flex shadow-sm rounded-pill overflow-hidden">

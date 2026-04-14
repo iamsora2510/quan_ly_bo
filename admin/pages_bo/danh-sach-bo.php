@@ -1,28 +1,26 @@
 <?php
-include '../config/db.php';
-include './includes/header.php';
-include './includes/sidebar.php';
+// Di chuyển file vào pages_bo/ thì phải lùi 2 cấp để ra khỏi admin/ và vào config/
+include '../../config/db.php'; 
+include '../includes/header.php';
+include '../includes/sidebar.php';
 
 // 1. LẤY GIÁ TRỊ LỌC TỪ URL
 $f_chuong = $_GET['chuong'] ?? '';
 $f_ho = $_GET['ho'] ?? '';
 $f_giong = $_GET['giong'] ?? '';
 
-// 2. XÂY DỰNG SQL NÂNG CẤP CÓ BỘ LỌC
-$sql = "SELECT b.*, g.ten_giong, c.ten_chuong, p.ngay_mua, h.ten_ho_dan 
+// 2. XÂY DỰNG SQL
+$sql = "SELECT b.*, g.ten_giong, c.ten_chuong, h.ten_ho_dan 
         FROM danh_sach_bo b
         INNER JOIN giong_bo g ON b.ma_giong = g.id
         INNER JOIN chuong_nuoi c ON b.ma_chuong = c.id
-        LEFT JOIN phieu_thu_mua p ON b.ma_phieu_nhap = p.id
-        LEFT JOIN ho_dan h ON p.ma_ho_dan = h.id
-        WHERE 1=1"
-        ; // Mẹo nối chuỗi WHERE
+        LEFT JOIN ho_dan h ON b.ma_ho_dan = h.id 
+        WHERE 1=1";
 
 if ($f_chuong != '') $sql .= " AND b.ma_chuong = " . intval($f_chuong);
-if ($f_ho != '')     $sql .= " AND p.ma_ho_dan = " . intval($f_ho);
+if ($f_ho != '')     $sql .= " AND b.ma_ho_dan = " . intval($f_ho); 
 if ($f_giong != '')  $sql .= " AND b.ma_giong = " . intval($f_giong);
 
-// Sắp xếp: Đang nuôi lên đầu, sau đó mới đến Đã bán. Trong mỗi nhóm thì con mới nhập hiện trước.
 $sql .= " ORDER BY FIELD(b.trang_thai, 'dang_nuoi', 'da_ban') ASC, b.id DESC";
 $result = mysqli_query($conn, $sql);
 ?>
@@ -32,7 +30,7 @@ $result = mysqli_query($conn, $sql);
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-sm-6">
-                    <h3 class="mb-0"><i class="bi bi-list-stars me-2"></i>Quản lý Đàn Bò Trong Kho</h3>
+                    <h3 class="mb-0"><i class="bi bi-list-stars me-2"></i>Quản lý Đàn Bò</h3>
                 </div>
                 <div class="col-sm-6 text-end">
                     <a href="them-bo.php" class="btn btn-primary shadow-sm rounded-pill px-4">
@@ -92,7 +90,7 @@ $result = mysqli_query($conn, $sql);
                 </div>
             </div>
 
-            <form action="ban-nhieu-bo.php" method="POST">
+            <form action="../pages_giaodich/ban-nhieu-bo.php" method="POST">
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white py-3">
                         <button type="submit" class="btn btn-success shadow-sm rounded-pill px-4">
@@ -119,8 +117,10 @@ $result = mysqli_query($conn, $sql);
                                     <?php
                                     if ($result && mysqli_num_rows($result) > 0) {
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            $path = "../assets/uploads/" . $row['hinh_anh'];
-                                            $img_src = (!empty($row['hinh_anh']) && file_exists($path)) ? $path : '../assets/img/no-image.png';
+                                            // Đường dẫn ảnh từ admin/pages_bo/ nhảy ra ngoài 2 cấp để vào assets
+                                            $path = "../../assets/uploads/" . $row['hinh_anh'];
+                                            $img_src = (!empty($row['hinh_anh']) && file_exists($path)) ? $path : '../../assets/img/no-image.png';
+                                            
                                             $status_class = ($row['trang_thai'] == 'dang_nuoi') ? 'bg-success' : 'bg-secondary';
                                             $status_text = ($row['trang_thai'] == 'dang_nuoi') ? 'Đang nuôi' : 'Đã bán';
                                     ?>
@@ -141,14 +141,17 @@ $result = mysqli_query($conn, $sql);
                                                 </td>
                                                 <td class="text-center fw-bold"><?= $row['can_nang_hien_tai'] ?> kg</td>
                                                 <td class="text-end text-success fw-bold"><?= number_format($row['gia_mua_vao']) ?> đ</td>
-                                                <td class="text-center text-muted"><small><?= $row['ngay_mua'] ? date('d/m/Y', strtotime($row['ngay_mua'])) : 'N/A' ?></small></td>
+                                                <td class="text-center text-muted"><small><?= $row['ngay_nhap'] ? date('d/m/Y', strtotime($row['ngay_nhap'])) : 'N/A' ?></small></td>
                                                 <td class="text-center"><span class="badge <?= $status_class ?> rounded-pill px-3"><?= $status_text ?></span></td>
                                                 <td class="text-center">
                                                     <div class="btn-group shadow-sm">
                                                         <a href="sua-bo.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
                                                         <a href="cap-nhat-suc-khoe.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-outline-info"><i class="bi bi-heart-pulse"></i></a>
                                                         <a href="lich-su-bo.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-earmark-person"></i></a>
-                                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete(<?= $row['id'] ?>, 'bo')"><i class="bi bi-trash"></i></button>
+                                                        
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete(<?= $row['id'] ?>, 'xoa-bo.php')">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -165,3 +168,6 @@ $result = mysqli_query($conn, $sql);
         </div>
     </div>
 </main>
+
+<script src="../../assets/js/admin-scripts.js"></script>
+<?php include '../includes/footer.php'; ?>

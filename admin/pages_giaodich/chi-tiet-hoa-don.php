@@ -44,8 +44,11 @@ $res_ct = mysqli_query($conn, $sql_ct);
                         <p class="mb-0 text-muted"><i class="bi bi-geo-alt me-1"></i> <?= $phieu['dia_chi'] ?></p>
                     </div>
                     <div class="col-md-6 text-md-end">
-                        <p class="mb-1 text-muted text-uppercase small fw-bold">Ngày lập hóa đơn</p>
-                        <h5><?= date('d/m/Y', strtotime($phieu['ngay_ban'])) ?></h5>
+                        <p class="mb-1 text-muted text-uppercase small fw-bold">Thông tin thời gian</p>
+                        <p class="mb-1"><strong>Ngày bán:</strong> <?= date('d/m/Y', strtotime($phieu['ngay_ban'])) ?></p>
+                        <p class="mb-2"><strong>Ngày giao:</strong>
+                            <?= !empty($phieu['ngay_ban_giao']) ? date('d/m/Y', strtotime($phieu['ngay_ban_giao'])) : '<span class="text-muted small">Chưa cập nhật</span>' ?>
+                        </p>
                         <span class="badge <?= $phieu['trang_thai_thanh_toan'] == 'da_thanh_toan' ? 'bg-success' : 'bg-warning text-dark' ?> px-3">
                             <?= $phieu['trang_thai_thanh_toan'] == 'da_thanh_toan' ? 'Đã thanh toán' : 'Còn nợ' ?>
                         </span>
@@ -64,17 +67,17 @@ $res_ct = mysqli_query($conn, $sql_ct);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
+                            <?php
                             $stt = 1;
-                            while($row = mysqli_fetch_assoc($res_ct)): 
+                            while ($row = mysqli_fetch_assoc($res_ct)):
                             ?>
-                            <tr>
-                                <td class="text-center"><?= $stt++ ?></td>
-                                <td class="fw-bold"><?= $row['ma_so_tai'] ?></td>
-                                <td><?= $row['ten_giong'] ?></td>
-                                <td class="text-center"><?= $row['can_nang_ban'] ?> kg</td>
-                                <td class="text-end fw-bold"><?= number_format($row['gia_ban_con_nay']) ?> đ</td>
-                            </tr>
+                                <tr>
+                                    <td class="text-center"><?= $stt++ ?></td>
+                                    <td class="fw-bold"><?= $row['ma_so_tai'] ?></td>
+                                    <td><?= $row['ten_giong'] ?></td>
+                                    <td class="text-center"><?= $row['can_nang_ban'] ?> kg</td>
+                                    <td class="text-end fw-bold"><?= number_format($row['gia_ban_con_nay']) ?> đ</td>
+                                </tr>
                             <?php endwhile; ?>
                         </tbody>
                         <tfoot>
@@ -86,11 +89,11 @@ $res_ct = mysqli_query($conn, $sql_ct);
                                 <td colspan="4" class="text-end fw-bold">Khách đã trả trước:</td>
                                 <td class="text-end text-success"><?= number_format($phieu['so_tien_tra_truoc']) ?> đ</td>
                             </tr>
-                            <?php if($phieu['tong_tien'] > $phieu['so_tien_tra_truoc']): ?>
-                            <tr class="table-warning">
-                                <td colspan="4" class="text-end fw-bold text-danger">SỐ TIỀN CÒN NỢ:</td>
-                                <td class="text-end fw-bold text-danger"><?= number_format($phieu['tong_tien'] - $phieu['so_tien_tra_truoc']) ?> đ</td>
-                            </tr>
+                            <?php if ($phieu['tong_tien'] > $phieu['so_tien_tra_truoc']): ?>
+                                <tr class="table-warning">
+                                    <td colspan="4" class="text-end fw-bold text-danger">SỐ TIỀN CÒN NỢ:</td>
+                                    <td class="text-end fw-bold text-danger"><?= number_format($phieu['tong_tien'] - $phieu['so_tien_tra_truoc']) ?> đ</td>
+                                </tr>
                             <?php endif; ?>
                         </tfoot>
                     </table>
@@ -112,20 +115,20 @@ $res_ct = mysqli_query($conn, $sql_ct);
                                     <tbody>
                                         <?php
                                         $ls_res = mysqli_query($conn, "SELECT * FROM lich_su_thu_no WHERE ma_phieu_xuat = $id_phieu ORDER BY ngay_thu DESC");
-                                        if(mysqli_num_rows($ls_res) > 0):
-                                            while($ls = mysqli_fetch_assoc($ls_res)):
+                                        if (mysqli_num_rows($ls_res) > 0):
+                                            while ($ls = mysqli_fetch_assoc($ls_res)):
                                         ?>
-                                        <tr>
-                                            <td class="ps-2 small"><?= date('d/m/Y H:i', strtotime($ls['ngay_thu'])) ?></td>
-                                            <td class="text-end pe-2 fw-bold text-success"><?= number_format($ls['so_tien_thu']) ?> đ</td>
-                                        </tr>
-                                        <?php 
+                                                <tr>
+                                                    <td class="ps-2 small"><?= date('d/m/Y H:i', strtotime($ls['ngay_thu'])) ?></td>
+                                                    <td class="text-end pe-2 fw-bold text-success"><?= number_format($ls['so_tien_thu']) ?> đ</td>
+                                                </tr>
+                                            <?php
                                             endwhile;
                                         else:
-                                        ?>
-                                        <tr>
-                                            <td colspan="2" class="text-center text-muted small py-2">Chưa có lịch sử thu thêm.</td>
-                                        </tr>
+                                            ?>
+                                            <tr>
+                                                <td colspan="2" class="text-center text-muted small py-2">Chưa có lịch sử thu thêm.</td>
+                                            </tr>
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
@@ -133,10 +136,10 @@ $res_ct = mysqli_query($conn, $sql_ct);
                         </div>
                     </div>
                 </div>
-                <?php if(!empty($phieu['ghi_chu'])): ?>
-                <div class="alert alert-light border mt-3">
-                    <strong>Ghi chú:</strong> <?= $phieu['ghi_chu'] ?>
-                </div>
+                <?php if (!empty($phieu['ghi_chu'])): ?>
+                    <div class="alert alert-light border mt-3">
+                        <strong>Ghi chú:</strong> <?= $phieu['ghi_chu'] ?>
+                    </div>
                 <?php endif; ?>
             </div>
             <div class="card-footer bg-white text-center py-3">

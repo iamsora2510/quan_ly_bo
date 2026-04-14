@@ -1,7 +1,7 @@
-<?php 
-include '../config/db.php'; 
-include './includes/header.php'; 
-include './includes/sidebar.php'; 
+<?php
+include '../config/db.php';
+include './includes/header.php';
+include './includes/sidebar.php';
 
 $ids = $_POST['selected_bo'] ?? [];
 if (empty($ids)) {
@@ -28,7 +28,7 @@ $res = mysqli_query($conn, $sql);
     </div>
     <div class="app-content">
         <div class="container-fluid">
-            <form action="xu-ly-ban-hang.php" method="POST">
+            <form action="modules/xu-ly-ban-hang.php" method="POST">
                 <div class="card shadow border-0 mb-4">
                     <div class="card-header bg-success text-white fw-bold">DANH SÁCH BÒ XUẤT BÁN</div>
                     <div class="card-body p-0">
@@ -43,35 +43,35 @@ $res = mysqli_query($conn, $sql);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php while($r = mysqli_fetch_assoc($res)): 
+                                    <?php while ($r = mysqli_fetch_assoc($res)):
                                         $gia_von = $r['gia_mua_vao'] + ($r['tong_phi_cs'] ?? 0);
                                     ?>
-                                    <tr>
-                                        <td class="ps-3">
-                                            <div class="d-flex align-items-center">
-                                                <img src="../assets/uploads/<?= $r['hinh_anh'] ?: 'no-image.png' ?>" class="rounded me-2" style="width: 50px; height: 40px; object-fit: cover;">
-                                                <div>
-                                                    <strong class="text-primary"><?= $r['ma_so_tai'] ?></strong><br>
-                                                    <small class="text-muted"><?= $r['ten_giong'] ?> - <?= $r['can_nang_hien_tai'] ?>kg</small>
+                                        <tr>
+                                            <td class="ps-3">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="../assets/uploads/<?= $r['hinh_anh'] ?: 'no-image.png' ?>" class="rounded me-2" style="width: 50px; height: 40px; object-fit: cover;">
+                                                    <div>
+                                                        <strong class="text-primary"><?= $r['ma_so_tai'] ?></strong><br>
+                                                        <small class="text-muted"><?= $r['ten_giong'] ?> - <?= $r['can_nang_hien_tai'] ?>kg</small>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <input type="hidden" name="can_nang[<?= $r['id'] ?>]" value="<?= $r['can_nang_hien_tai'] ?>">
-                                        </td>
-                                        <td>
-                                            <small>Nhập: <?= number_format($r['gia_mua_vao']) ?></small><br>
-                                            <small>Nuôi: <?= number_format($r['tong_phi_cs'] ?? 0) ?></small><br>
-                                            <strong>Vốn: <?= number_format($gia_von) ?></strong>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="gia_ban[<?= $r['id'] ?>]" 
-                                                   class="form-control fw-bold text-success gia-ban-input" 
-                                                   data-von="<?= $gia_von ?>" 
-                                                   oninput="tinhToanLôBò()" required>
-                                        </td>
-                                        <td class="text-center">
-                                            <strong id="loi_nhuan_<?= $r['id'] ?>">0</strong> đ
-                                        </td>
-                                    </tr>
+                                                <input type="hidden" name="can_nang[<?= $r['id'] ?>]" value="<?= $r['can_nang_hien_tai'] ?>">
+                                            </td>
+                                            <td>
+                                                <small>Nhập: <?= number_format($r['gia_mua_vao']) ?></small><br>
+                                                <small>Nuôi: <?= number_format($r['tong_phi_cs'] ?? 0) ?></small><br>
+                                                <strong>Vốn: <?= number_format($gia_von) ?></strong>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="gia_ban[<?= $r['id'] ?>]"
+                                                    class="form-control fw-bold text-success gia-ban-input"
+                                                    data-von="<?= $gia_von ?>"
+                                                    oninput="tinhToanLôBò()" required>
+                                            </td>
+                                            <td class="text-center">
+                                                <strong id="loi_nhuan_<?= $r['id'] ?>">0</strong> đ
+                                            </td>
+                                        </tr>
                                     <?php endwhile; ?>
                                 </tbody>
                                 <tfoot class="table-secondary fw-bold">
@@ -94,10 +94,20 @@ $res = mysqli_query($conn, $sql);
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label fw-bold">Khách hàng mua:</label>
                                         <select name="ma_kh" class="form-select border-primary" required>
-                                            <?php 
-                                            $khs = mysqli_query($conn, "SELECT * FROM khach_hang");
-                                            while($k = mysqli_fetch_assoc($khs)) {
-                                                echo "<option value='{$k['id']}'>[{$k['loai_khach']}] {$k['ten_khach_hang']}</option>";
+                                            <?php
+                                            // Lấy ID khách từ URL nếu có (truyền từ trang Đặt chỗ sang)
+                                            $id_kh_tu_dat_cho = isset($_GET['id_kh']) ? (int)$_GET['id_kh'] : 0;
+
+                                            // Truy vấn: Lấy khách truyền thống HOẶC đúng ông khách đang đặt chỗ này
+                                            $sql_kh = "SELECT * FROM khach_hang 
+                                            WHERE loai_khach != 'Thành viên Web' 
+                                             OR id = $id_kh_tu_dat_cho";
+
+                                            $khs = mysqli_query($conn, $sql_kh);
+                                            while ($k = mysqli_fetch_assoc($khs)) {
+                                                // Nếu ID trùng với khách từ đơn đặt chỗ thì thêm thuộc tính selected
+                                                $selected = ($k['id'] == $id_kh_tu_dat_cho) ? 'selected' : '';
+                                                echo "<option value='{$k['id']}' $selected>[{$k['loai_khach']}] {$k['ten_khach_hang']}</option>";
                                             }
                                             ?>
                                         </select>
@@ -110,6 +120,12 @@ $res = mysqli_query($conn, $sql);
                                         <label class="form-label fw-bold">Ngày bán:</label>
                                         <input type="date" name="ngay_ban" class="form-control" value="<?= date('Y-m-d') ?>">
                                     </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label fw-bold text-danger">Ngày bàn giao bò:</label>
+                                        <input type="date" name="ngay_ban_giao" class="form-control border-danger" value="<?= date('Y-m-d') ?>" required>
+                                    </div>
+
                                     <div class="col-md-12">
                                         <div id="vung_no" class="alert alert-warning py-2 mb-0" style="display:none;">
                                             <i class="bi bi-exclamation-triangle-fill me-2"></i>

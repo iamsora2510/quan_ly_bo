@@ -51,8 +51,8 @@ $res_khach = mysqli_query($conn, "SELECT * FROM khach_hang ORDER BY ten_khach_ha
                                     <td><?= $hd['dia_chi'] ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="sua-ho-dan.php?id=<?= $hd['id'] ?>" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
-                                            <a href="xoa-doi-tac.php?id=<?= $hd['id'] ?>&type=ho" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xóa hộ dân này?')"><i class="bi bi-trash"></i></a>
+                                            <a href="modules/sua-ho-dan.php" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
+                                            <a href="modules/xoa-doi-tac.php?= $hd['id'] ?>&type=ho" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xóa hộ dân này?')"><i class="bi bi-trash"></i></a>
                                         </div>
                                     </td>
                                 </tr>

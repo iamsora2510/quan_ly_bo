@@ -2,7 +2,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold mb-3"><i class="bi bi-cow me-2"></i>THANH STU BEEF</h5>
+                    <h5 class="fw-bold mb-3"><i class="bi bi-cow me-2"></i>TD Cattle Farm</h5>
                     <p class="small text-white-50">Chuyên cung cấp các giống bò 3B, Brahman, bò Cọp chất lượng cao. Hỗ trợ kỹ thuật chăn nuôi tận tình cho hộ dân.</p>
                 </div>
                 <div class="col-md-4 mb-4">
@@ -15,14 +15,14 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold mb-3">Thông Tin Liên Hệ</h5>
-                    <p class="small text-white-50"><i class="bi bi-geo-alt me-2"></i> 180 Cao Lỗ, Quận 8, TP.HCM</p>
-                    <p class="small text-white-50"><i class="bi bi-telephone me-2"></i> 09xx xxx xxx</p>
-                    <p class="small text-white-50"><i class="bi bi-envelope me-2"></i> lienhe@thanhstu.com</p>
+                    <p class="small text-white-50"><i class="bi bi-geo-alt me-2"></i> 196 Cao Lỗ, Quận 8, TP.HCM</p>
+                    <p class="small text-white-50"><i class="bi bi-telephone me-2"></i> 0333333333</p>
+                    <p class="small text-white-50"><i class="bi bi-envelope me-2"></i> iamsora2510@gmail.com</p>
                 </div>
             </div>
             <hr class="border-secondary">
             <div class="text-center">
-                <p class="small text-white-50 mb-0">&copy; 2026 Thanh STU - Đồ án thực tập CNTT.</p>
+                <p class="small text-white-50 mb-0">&copy; 2026 TD Cattle Farm - Đồ án thực tập CNTT.</p>
             </div>
         </div>
     </footer>

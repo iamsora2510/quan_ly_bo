@@ -1,0 +1,70 @@
+/* admin/assets/css/thong-ke.css */
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --grad-blue: linear-gradient(135deg, #3a8dff 0%, #0052cc 100%);
+    --grad-green: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    --grad-red: linear-gradient(135deg, #ff4d4d 0%, #c10000 100%);
+    --grad-dark: linear-gradient(135deg, #4b4b4b 0%, #2d2d2d 100%);
+}
+
+.stat-card {
+    border: none;
+    border-radius: 20px;
+    color: white;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.stat-card i {
+    position: absolute;
+    right: -15px;
+    bottom: -15px;
+    font-size: 6rem;
+    opacity: 0.15;
+}
+
+.bg-grad-blue { background: var(--grad-blue); }
+.bg-grad-green { background: var(--grad-green); }
+.bg-grad-red { background: var(--grad-red); }
+.bg-grad-dark { background: var(--grad-dark); }
+
+.main-container {
+    background: #f8f9fa;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.content-box {
+    background: white;
+    border-radius: 25px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+}
+
+.badge-pill-custom {
+    padding: 0.6em 1.2em;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.badge-mua-dut { background-color: #e3f2fd; color: #0d6efd; border: 1px solid #b3e5fc; }
+.badge-ky-gui { background-color: #f3e5f5; color: #8e24aa; border: 1px solid #e1bee7; }
+
+.table thead th {
+    background-color: #fcfcfc;
+    border-bottom: 2px solid #eee;
+    color: #888;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}

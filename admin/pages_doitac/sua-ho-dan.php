@@ -46,7 +46,7 @@ if(isset($_POST['btnCapNhat'])) {
                 </div>
                 <div class="text-center">
                     <button name="btnCapNhat" class="btn btn-success px-4">Lưu thay đổi</button>
-                    <a href="quan-ly-doi-tac.php" class="btn btn-secondary px-4">Quay lại</a>
+                    <a href="../quan-ly-doi-tac.php" class="btn btn-secondary px-4">Quay lại</a>
                 </div>
             </form>
         </div>

@@ -1,5 +1,5 @@
 <?php
-include '../config/db.php';
+include '../../config/db.php';
 mysqli_begin_transaction($conn);
 
 try {
@@ -24,7 +24,7 @@ try {
     $stmt_up->execute();
 
     mysqli_commit($conn);
-    echo "<script>alert('Đã thu tiền và lưu vào lịch sử!'); window.location='cong-no.php';</script>";
+    echo "<script>alert('Đã thu tiền và lưu vào lịch sử!'); window.location='../cong-no.php';</script>";
 
 } catch (Exception $e) {
     mysqli_rollback($conn);

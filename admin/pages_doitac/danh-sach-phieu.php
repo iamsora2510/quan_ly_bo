@@ -91,5 +91,5 @@ $result = mysqli_query($conn, $sql);
     </div>
 </main>
 
-<script src="../../assets/js/admin-scripts.js"></script>
+<script src="../assets/js/admin-scripts.js"></script>
 <?php include 'includes/footer.php'; ?>
